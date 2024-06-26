@@ -1,0 +1,77 @@
+import { IsString, IsArray, IsPhoneNumber, IsNotEmpty, IsEmail, IsOptional, IsEnum, IsUUID } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { UpdateUserInterface } from '../interfaces';
+import { $Enums, Role, Role_Type } from '@prisma/client';
+import { Transform } from 'class-transformer';
+
+export class UpdateUserDto implements Omit<UpdateUserInterface, 'id'> {
+  @ApiProperty({
+    example: 'John',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty({
+    example: 'I am 88 years old',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @ApiProperty({
+    example: 'qwerty123',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  password?: string;
+
+  @ApiProperty({
+    example: '+998977777777',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  @IsPhoneNumber("UZ")
+  phone: string;
+
+  @ApiProperty({
+    example: 'JohnDoe77@gmail.com',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    maxItems: 8,
+    format: 'binary',
+    type: 'string',
+  })
+  image: any;
+
+  @ApiProperty({
+    examples: ['teacher', 'user', 'admin'],
+    enum: Role_Type,
+    required: true
+  })
+  @IsOptional()
+  @IsEnum(Role_Type)
+  @IsString()
+  role: $Enums.Role_Type;
+
+  @Transform(({ value }) => {
+    if (!value) return undefined;
+    else return value
+  })
+  @ApiProperty()
+  @IsOptional()
+  @IsUUID(4, {
+    each: true,
+  })
+  roles?: string[];
+}
