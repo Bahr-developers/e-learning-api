@@ -15,6 +15,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Category } from '@prisma/client';
+import { PERMISSIONS } from '../../constants/permission.constants';
+import { CheckAuth, Permision } from '../../decorators';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dtos';
 import { FileType } from './interfaces';
@@ -32,6 +34,8 @@ export class CategoryController {
     this.#_service = service;
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.category.get_all_categorys)
   @Get('find/all')
   async getTranslateList(
     @Headers('accept-language') languageCode: string,
@@ -39,6 +43,8 @@ export class CategoryController {
     return await this.#_service.getCategoryList(languageCode);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.category.get_one_category)
   @Get('find/:id')
   async getSingleCategoryList(
     @Param('id') categoryId: string,
@@ -47,10 +53,12 @@ export class CategoryController {
     return await this.#_service.getSingleCategory(languageCode, categoryId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.category.create_category)
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
   @Post('add')
-  async createTranslate(
+  async createCategory(
     @Body() payload: CreateCategoryDto,
     @UploadedFile() image: FileType,
     @Req() req: any,
@@ -58,6 +66,8 @@ export class CategoryController {
     await this.#_service.createCategory({ ...payload, image }, req.userId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.category.edit_category)
   @ApiConsumes('multipart/form-data')
   @Patch('edit/:id')
   @UseInterceptors(FileInterceptor('image'))
@@ -73,11 +83,15 @@ export class CategoryController {
     });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.category.delete_category)
   @Delete('delete/:id')
   async deleteCategory(@Param('id') id: string): Promise<void> {
     await this.#_service.deleteCategory(id);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.category.search_category)
   @Get('/search')
   async searchCategory(
     @Headers('accept-language') languageCode: string,

@@ -33,16 +33,15 @@ export class LessonService {
         video_url: video.fileName,
         course_order: Number(payload.course_order),
         module_id: payload.module_id,
-        user_id: 'c3e761bf-e61b-4d95-8d95-57c633966086',
+        user_id: 'c66607e5-69bf-4170-a199-dd7b99ae405a',
       },
     });
 
-    // await this.#_prisma.user_lesson.create({data:
-    // {
-    //   user_id: userId,
-    //   lesson_id: newLesson.id,
-    //   completed_time:
-    // }})
+    await this.#_prisma.user_lesson.create({data:
+    {
+      user_id: "c66607e5-69bf-4170-a199-dd7b99ae405a",
+      lesson_id: newLesson.id,
+    }})
   }
 
   async getSingleLesson(id: string): Promise<Lesson> {

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateCourseDto {
   @ApiProperty({
-    example: '660d5290e49538271705501e',
+    example: 'Full Stack (Node.js, Vue.js)',
     required: false,
   })
   @IsOptional()
@@ -11,7 +11,7 @@ export class UpdateCourseDto {
   name?: string;
 
   @ApiProperty({
-    example: '660d5290e49538271705501e',
+    example: 'Full Stack kursi',
     required: false,
   })
   @IsOptional()

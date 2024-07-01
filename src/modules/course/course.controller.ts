@@ -19,6 +19,8 @@ import {
   FileFieldsInterceptor,
 } from '@nestjs/platform-express';
 import { FileType } from '../category/interfaces';
+import { CheckAuth, Permision } from '../../decorators';
+import { PERMISSIONS } from '../../constants/permission.constants';
 
 @ApiBearerAuth('JWT')
 @ApiTags('Course')
@@ -33,16 +35,22 @@ export class CourseController {
     this.#_service = service;
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.course.get_all_courses)
   @Get('find/all')
   async getCourseList(): Promise<Course[]> {
     return await this.#_service.getCourseList();
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.course.get_one_course)
   @Get('find/:id')
   async getSingleCourse(@Param('id') courseId: string): Promise<Course> {
     return await this.#_service.getSingleCourse(courseId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.course.create_course)
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'landing_image' }, { name: 'promo_video' }]),
@@ -56,6 +64,8 @@ export class CourseController {
     await this.#_service.createCourse({ ...payload, ...files });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.course.edit_course)
   @Patch('edit/:id')
   async updateCourse(
     @Param('id') courseId: string,
@@ -67,11 +77,15 @@ export class CourseController {
     });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.course.delete_course)
   @Delete('delete/:id')
   async deleteCourse(@Param('id') id: string): Promise<void> {
     await this.#_service.deleteCourse(id);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.course.search_course)
   @Get('/search')
   async searchCourse(@Query('name') name: string): Promise<Course[]> {
     return await this.#_service.searchCourse(name);

@@ -11,7 +11,7 @@ import {
   import { JwtService } from '@nestjs/jwt';
   import { ConfigService } from '@nestjs/config';
   import { Request } from 'express';
-import { PrismaService } from '../../prisma';
+import { PrismaService } from '../prisma';
   
   @Injectable()
   export class PermissionGuard implements CanActivate {

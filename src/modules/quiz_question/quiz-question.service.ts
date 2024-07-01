@@ -23,6 +23,7 @@ export class QuizQuestionService {
       data: {
         title: payload.title,
         quiz_id: payload.quiz_id,
+        ball: payload.ball,
       },
     });
   }
@@ -59,6 +60,12 @@ export class QuizQuestionService {
       await this.#_prisma.quiz_question.update({
         where: { id: payload.id },
         data: { title: payload.title },
+      });
+    }
+    if (payload.ball) {
+      await this.#_prisma.quiz_question.update({
+        where: { id: payload.id },
+        data: { ball: payload.ball },
       });
     }
   }

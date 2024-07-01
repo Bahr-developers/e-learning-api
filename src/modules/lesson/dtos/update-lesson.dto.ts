@@ -48,5 +48,5 @@ export class UpdateLessonDto {
     example:true,
     required: false
   })
-  is_preview_lesson: boolean
+  is_preview_lesson?: boolean
 }

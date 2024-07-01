@@ -1,0 +1,1 @@
+export * from './create-user_quiz_attempt.interface'
