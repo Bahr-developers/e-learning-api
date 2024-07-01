@@ -78,6 +78,7 @@ model Category {
   @@id([id])
   @@map("category")
 }
+
 model Course {
   id                  String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
   name                String  @map("name") @db.VarChar()
@@ -91,7 +92,8 @@ model Course {
 
   course_intend course_intend[]
   module        Module[]
-  quiz        Quiz[]
+  enrollment    Enrollment[]
+  quiz          Quiz[]
 
   // user     User     @relation(fields: [createdBy], references: [id])
   category Category? @relation(fields: [category_id], references: [id])
@@ -99,46 +101,80 @@ model Course {
   @@id([id])
   @@map("course")
 }
+
 model Quiz {
-  id                  String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
-  name                String  @map("name") @db.VarChar()
-  description         String  @map("description") @db.VarChar()
-  number              Int     @map("number") @db.Integer()
-  course_order        Int     @map("course_order") @db.Integer()
-  min_pas_score       Int     @map("min_pas_score") @db.Integer()
-  is_pass_required    Boolean @default(true)  @map("is_pass_required")
-  course_id           String @map("course_id") @db.Uuid
+  id               String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
+  name             String  @map("name") @db.VarChar()
+  description      String  @map("description") @db.VarChar()
+  number           Int     @map("number") @db.Integer()
+  course_order     Int     @map("course_order") @db.Integer()
+  min_pas_score    Int     @map("min_pas_score") @db.Integer()
+  is_pass_required Boolean @default(true) @map("is_pass_required")
+  course_id        String  @map("course_id") @db.Uuid
 
   quiz_question     quiz_question[]
+  user_quiz_attempt user_quiz_attempt[]
 
-  course Course  @relation(fields: [course_id], references: [id])
+  course Course @relation(fields: [course_id], references: [id])
 
   @@id([id])
   @@map("quiz")
 }
+
+model Enrollment {
+  id                  String    @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
+  course_id           String    @map("course_id") @db.Uuid
+  user_id             String    @map("user_id") @db.Uuid
+  enrollment_datetime DateTime  @default(now()) @map("enrollment_datetime")
+  completed_time      DateTime? @map("completed_time")
+
+  course Course @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id])
+  @@map("enrollment")
+}
+
 model quiz_answer {
-  id        String @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
-  answer_text     String @map("answer_text") @db.VarChar()
-  is_correct     Boolean @default(false) @map("is_correct")
-  question_id   String @map("question_id") @db.Uuid
+  id          String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
+  answer_text String  @map("answer_text") @db.VarChar()
+  is_correct  Boolean @default(false) @map("is_correct")
+  question_id String  @map("question_id") @db.Uuid
 
   quiz_question quiz_question @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([id])
   @@map("quiz_answer")
 }
-model quiz_question {
-  id        String @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
-  title     String @map("title") @db.VarChar()
-  quiz_id   String @map("quiz_id") @db.Uuid
 
-  quiz_answer     quiz_answer[]
+model user_quiz_attempt {
+  id               String   @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
+  user_id          String   @map("user_id") @db.Uuid
+  quiz_id          String   @map("quiz_id") @db.Uuid
+  attempt_datetime DateTime? @default(now()) @map("attempt_datetime")
+  score_achieved   Int      @map("score_achieved") @db.Integer
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  quiz Quiz @relation(fields: [quiz_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id])
+  @@map("user_quiz_attempt")
+}
+
+model quiz_question {
+  id      String @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
+  title   String @map("title") @db.VarChar()
+  quiz_id String @map("quiz_id") @db.Uuid
+  ball    Int    @map("ball") @db.Integer()
+
+  quiz_answer quiz_answer[]
 
   quiz Quiz @relation(fields: [quiz_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([id])
   @@map("quiz_question")
 }
+
 model Lesson {
   id                String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
   name              String  @map("name") @db.VarChar()
@@ -148,18 +184,17 @@ model Lesson {
   course_order      Int     @map("course_order") @db.Integer()
   video_url         String? @map("promo_video_url") @db.VarChar()
   is_preview_lesson Boolean @default(false) @map("is_progress_limited") @db.Boolean()
-  user_id         String  @map("user_id") @db.Uuid
+  user_id           String  @map("user_id") @db.Uuid
 
-  user User @relation(fields: [user_id], references: [id])
-  module Module? @relation(fields: [module_id], references: [id])
-  resource Resource[]
+  user        User          @relation(fields: [user_id], references: [id])
+  module      Module?       @relation(fields: [module_id], references: [id])
+  resource    Resource[]
   user_lesson user_lesson[]
-
-
 
   @@id([id])
   @@map("lesson")
 }
+
 model course_intend {
   id        String @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
   title     String @map("title") @db.VarChar()
@@ -170,6 +205,7 @@ model course_intend {
   @@id([id])
   @@map("course_intend")
 }
+
 model Module {
   id        String @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
   name      String @map("name") @db.VarChar()
@@ -183,12 +219,13 @@ model Module {
   @@id([id])
   @@map("module")
 }
+
 model Resource {
   id        String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
   file_url  String? @map("file_url") @db.VarChar()
   title     String  @map("title") @db.VarChar()
-  link_url  String?  @map("link_url") @db.VarChar
-  lesson_id String @map("lesson_id") @db.Uuid
+  link_url  String? @map("link_url") @db.VarChar
+  lesson_id String  @map("lesson_id") @db.Uuid
 
   lesson Lesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
@@ -197,12 +234,13 @@ model Resource {
 }
 
 model user_lesson {
-  id        String  @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
-  completed_time  DateTime @map("completed_time") @db.Date()
-  lesson_id String @map("lesson_id") @db.Uuid
-  user_id String @map("user_id") @db.Uuid
+  id             String   @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
+  completed_time DateTime? @map("completed_time") @db.Date()
+  lesson_id      String   @map("lesson_id") @db.Uuid
+  user_id        String   @map("user_id") @db.Uuid
 
   lesson Lesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([id])
   @@map("user_lesson")
@@ -218,11 +256,14 @@ model User {
   password    String?   @map("password") @db.VarChar()
   role_type   Role_Type @default(user) @map("role_type")
 
-  sms        Sms[]
+  sms               Sms[]
   // course     Course[]
-  lesson     Lesson[]
-  users      UserOnRole[]
-  userDevice UserDevice[]
+  user_lesson       user_lesson[]
+  enrollment        Enrollment[]
+  lesson            Lesson[]
+  user_quiz_attempt user_quiz_attempt[]
+  users             UserOnRole[]
+  userDevice        UserDevice[]
 
   @@id([id])
   @@map("user")
@@ -258,6 +299,7 @@ model UserDevice {
   @@id([id])
   @@map("user_device")
 }
+
 model Model {
   id   String @default(dbgenerated("GEN_RANDOM_UUID()")) @map("id") @db.Uuid
   name String @map("name") @db.VarChar()

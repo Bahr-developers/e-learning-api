@@ -13,6 +13,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { PERMISSIONS } from '../../constants/permission.constants';
+import { CheckAuth, Permision } from '../../decorators';
 import { FileType } from '../category/interfaces';
 import { CreateUserDto, UpdateUserDto } from './dtos';
 import { UserService } from './user.service';
@@ -30,16 +32,22 @@ export class UserController {
     this.#_service = service;
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.user.get_all_users)
   @Get('find/all')
   async getUserList(): Promise<User[]> {
     return await this.#_service.getUserList();
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.user.get_one_user)
   @Get('/user/by/:userId')
   async getSingleUserByUserID(@Param('userId') userId: string): Promise<User> {
     return await this.#_service.getSingleUser(userId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.user.create_user)
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
   @Post('add')
@@ -51,6 +59,8 @@ export class UserController {
     await this.#_service.createUser({ ...payload, image }, req.userId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.user.edit_user)
   @ApiConsumes('multipart/form-data')
   @Patch('edit/:id')
   @UseInterceptors(FileInterceptor('image'))
@@ -70,6 +80,8 @@ export class UserController {
     );
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.user.delete_user)
   @Delete('delete/:id')
   async deleteUser(@Param('id') id: string): Promise<void> {
     await this.#_service.deleteUser(id);

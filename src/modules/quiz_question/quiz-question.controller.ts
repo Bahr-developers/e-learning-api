@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { quiz_question } from '@prisma/client';
+import { PERMISSIONS } from '../../constants/permission.constants';
+import { CheckAuth, Permision } from '../../decorators';
 import { CreateQuizQuestionDto, UpdateQuizQuestionDto } from './dtos';
 import { QuizQuestionService } from './quiz-question.service';
 
@@ -25,11 +27,15 @@ export class QuizQuestionController {
     this.#_service = service;
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.quiz_question.get_all_quiz_questions)
   @Get('find/all')
   async getQuizQuestionList(): Promise<quiz_question[]> {
     return await this.#_service.getQuizQuestionList();
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.quiz_question.get_one_quiz_question)
   @Get('find/:id')
   async getSingleQuizQuestion(
     @Param('id') quiz_questionId: string,
@@ -37,13 +43,17 @@ export class QuizQuestionController {
     return await this.#_service.getSingleQuizQuestion(quiz_questionId);
   }
 
-  @Get('find/:quizId')
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.quiz_question.get_one_quiz_question_by_quizId)
+  @Get('find/byquiz/:quizId')
   async getQuizQuestionbyQuizId(
     @Param('quizId') quizId: string,
   ): Promise<quiz_question> {
     return await this.#_service.getQuizQuestionbyQuizId(quizId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.quiz_question.create_quiz_question)
   @Post('add')
   async createQuizQuestion(
     @Body() payload: CreateQuizQuestionDto,
@@ -51,6 +61,8 @@ export class QuizQuestionController {
     await this.#_service.createQuizQuestion({ ...payload });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.quiz_question.edit_quiz_question)
   @Patch('edit/:id')
   async updateQuiz(
     @Param('id') quiz_questionId: string,
@@ -62,6 +74,8 @@ export class QuizQuestionController {
     });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.quiz_question.delete_quiz_question)
   @Delete('delete/:id')
   async deleteQuizQuestion(@Param('id') id: string): Promise<void> {
     await this.#_service.deleteQuizQuestion(id);

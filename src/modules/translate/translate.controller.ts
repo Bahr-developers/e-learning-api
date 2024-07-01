@@ -14,6 +14,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateTranslateDto, UpdateTranslateDto } from './dtos';
 import { Translate } from '@prisma/client';
 import { GetSingleTranslateResponse } from './interfaces';
+import { CheckAuth, Permision } from '../../decorators';
+import { PERMISSIONS } from '../../constants/permission.constants';
 
 @ApiBearerAuth('JWT')
 @ApiTags('Translate')
@@ -28,11 +30,15 @@ export class TranslateController {
     this.#_service = service;
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.get_all_translates)
   @Get('find/all')
   async getTranslateList(): Promise<Translate[]> {
     return await this.#_service.getTranslateList();
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.get_one_translate)
   @Get('find/:id')
   async retrieveSingleTranslate(
     @Param('id') translateId: string,
@@ -44,6 +50,8 @@ export class TranslateController {
     });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.search_translate_by_code)
   @Get('/search')
   async searchTranslate(@Query('code') code: string): Promise<Translate[]> {
     return await this.#_service.searchTranslate({
@@ -51,6 +59,8 @@ export class TranslateController {
     });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.get_single_translate_by_code)
   @Get('find/code/:code')
   async getSingleTranslateByCode(
     @Param('code') code: string,
@@ -58,11 +68,15 @@ export class TranslateController {
     return await this.#_service.getSingleTranslateByCode(code);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.create_translate)
   @Post('add')
   async createTranslate(@Body() payload: CreateTranslateDto): Promise<string> {
     return await this.#_service.createTranslate(payload);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.edit_translate)
   @Patch('edit/:id')
   async updateTranslate(
     @Param('id') translateId: string,
@@ -71,6 +85,8 @@ export class TranslateController {
     await this.#_service.updateTranslate({ ...payload, id: translateId });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.translate.delete_translate)
   @Delete('delete/:id')
   async deleteTranslate(@Param('id') translateId: string): Promise<void> {
     await this.#_service.deleteTranslate(translateId);

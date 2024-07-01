@@ -15,6 +15,8 @@ import { Resource } from '@prisma/client';
 import { UpdateResourceDto } from './dtos';
 import { ResourceService } from './resource.service';
 import { CreateResourceDto } from './dtos/create-resource.dto';
+import { CheckAuth, Permision } from '../../decorators';
+import { PERMISSIONS } from '../../constants/permission.constants';
 
 @ApiBearerAuth('JWT')
 @ApiTags('Resource')
@@ -29,16 +31,22 @@ export class ResourceController {
     this.#_service = service;
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.resource.get_all_resources)
   @Get('find/all')
   async getResourceList(): Promise<Resource[]> {
     return await this.#_service.getResourceList();
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.resource.get_one_resource)
   @Get('find/:id')
   async getSingleResource(@Param('id') resourceId: string): Promise<Resource> {
     return await this.#_service.getSingleResource(resourceId);
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.resource.create_resource)
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @Post('add')
@@ -49,6 +57,8 @@ export class ResourceController {
     await this.#_service.createResource({ ...payload, file });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.resource.update_resource)
   @ApiConsumes('multipart/form-data')
   @Patch('edit/:id')
   @UseInterceptors(FileInterceptor('file'))
@@ -64,6 +74,8 @@ export class ResourceController {
     });
   }
 
+  @CheckAuth(false)
+  @Permision(PERMISSIONS.resource.delete_resource)
   @Delete('delete/:id')
   async deleteResource(@Param('id') id: string): Promise<void> {
     await this.#_service.deleteResource(id);

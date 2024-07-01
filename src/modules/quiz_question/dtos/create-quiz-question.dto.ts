@@ -12,6 +12,13 @@ export class CreateQuizQuestionDto implements CreateQuizQuestionInterface {
   title: string;
 
   @ApiProperty({
+    example: 20,
+    required: true,
+  })
+  @IsNotEmpty()
+  ball: number;
+
+  @ApiProperty({
     required: true,
   })
   @IsString()
