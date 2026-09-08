@@ -66,7 +66,7 @@ export class EnrollmentService {
     });
 
     if (!course) {
-      throw new ConflictException(`Course question with ${id} is not exists`);
+      throw new ConflictException(`Course question with ${id} does not exist`);
     }
   }
   async #_checkEnrollment(id: string): Promise<void> {
@@ -75,7 +75,7 @@ export class EnrollmentService {
     });
 
     if (!enrollment) {
-      throw new ConflictException(`Enrollment with ${id} is not exists`);
+      throw new ConflictException(`Enrollment with ${id} does not exist`);
     }
   }
 
@@ -85,7 +85,7 @@ export class EnrollmentService {
     });
 
     if (!user) {
-      throw new ConflictException(`User with ${id} is not exists`);
+      throw new ConflictException(`User with ${id} does not exist`);
     }
   }
 }

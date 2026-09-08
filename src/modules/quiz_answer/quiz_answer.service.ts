@@ -87,7 +87,7 @@ export class QuizAnswerService {
     });
 
     if (!quiz_question) {
-      throw new ConflictException(`Quiz question with ${id} is not exists`);
+      throw new ConflictException(`Quiz question with ${id} does not exist`);
     }
   }
 
@@ -97,7 +97,7 @@ export class QuizAnswerService {
     });
 
     if (!answer) {
-      throw new ConflictException(`Answer with ${id} is not exists`);
+      throw new ConflictException(`Answer with ${id} does not exist`);
     }
   }
 }

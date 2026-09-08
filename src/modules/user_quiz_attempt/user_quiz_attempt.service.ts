@@ -91,7 +91,7 @@ export class UserQuizAttemptService {
     });
 
     if (!quiz_question) {
-      throw new ConflictException(`Quiz question with ${id} is not exists`);
+      throw new ConflictException(`Quiz question with ${id} does not exist`);
     }
   }
 
@@ -101,7 +101,7 @@ export class UserQuizAttemptService {
     });
 
     if (!answer) {
-      throw new ConflictException(`Answer with ${id} is not exists`);
+      throw new ConflictException(`Answer with ${id} does not exist`);
     }
   }
 
@@ -109,7 +109,7 @@ export class UserQuizAttemptService {
     const quiz = await this.#_prisma.quiz.findFirst({ where: { id: id } });
 
     if (!quiz) {
-      throw new ConflictException(`Quiz with ${id} is not exists`);
+      throw new ConflictException(`Quiz with ${id} does not exist`);
     }
   }
 
@@ -119,7 +119,7 @@ export class UserQuizAttemptService {
     });
 
     if (!user_quiz_attempt) {
-      throw new ConflictException(`User Quiz Attpemt with ${id} is not exists`);
+      throw new ConflictException(`User Quiz Attempt with ${id} does not exist`);
     }
   }
 
@@ -127,7 +127,7 @@ export class UserQuizAttemptService {
     const user = await this.#_prisma.user.findFirst({ where: { id: id } });
 
     if (!user) {
-      throw new ConflictException(`User with ${id} is not exists`);
+      throw new ConflictException(`User with ${id} does not exist`);
     }
   }
 }

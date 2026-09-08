@@ -290,7 +290,7 @@ export class UserService {
     const user = await this.#_prisma.user.findFirst({ where: { id: id } });
 
     if (!user) {
-      throw new ConflictException(`User with ${id} is not exists`);
+      throw new ConflictException(`User with ${id} does not exist`);
     }
   }
 
@@ -300,7 +300,7 @@ export class UserService {
     });
 
     if (!translate) {
-      throw new ConflictException(`Translate with ${id} is not exists`);
+      throw new ConflictException(`Translate with ${id} does not exist`);
     }
   }
 
