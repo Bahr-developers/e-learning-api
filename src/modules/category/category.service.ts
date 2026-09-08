@@ -172,7 +172,7 @@ export class CategoryService {
     });
 
     if (!category) {
-      throw new ConflictException(`Category with ${id} is not exists`);
+      throw new ConflictException(`Category with ${id} does not exist`);
     }
   }
 
@@ -182,7 +182,7 @@ export class CategoryService {
     });
 
     if (!translate) {
-      throw new ConflictException(`Translate with ${id} is not exists`);
+      throw new ConflictException(`Translate with ${id} does not exist`);
     }
   }
 

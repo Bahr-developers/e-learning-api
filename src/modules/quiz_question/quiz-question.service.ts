@@ -81,7 +81,7 @@ export class QuizQuestionService {
     });
 
     if (!quiz_question) {
-      throw new ConflictException(`Quiz question with ${id} is not exists`);
+      throw new ConflictException(`Quiz question with ${id} does not exist`);
     }
   }
 
@@ -89,7 +89,7 @@ export class QuizQuestionService {
     const quiz = await this.#_prisma.quiz.findFirst({ where: { id: id } });
 
     if (!quiz) {
-      throw new ConflictException(`Quiz with ${id} is not exists`);
+      throw new ConflictException(`Quiz with ${id} does not exist`);
     }
   }
 }

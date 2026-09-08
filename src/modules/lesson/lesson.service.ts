@@ -146,7 +146,7 @@ export class LessonService {
     const module = await this.#_prisma.module.findFirst({ where: { id: id } });
 
     if (!module) {
-      throw new ConflictException(`Module with ${id} is not exists`);
+      throw new ConflictException(`Module with ${id} does not exist`);
     }
   }
 
@@ -154,7 +154,7 @@ export class LessonService {
     const lesson = await this.#_prisma.lesson.findFirst({ where: { id: id } });
 
     if (!lesson) {
-      throw new ConflictException(`Lesson with ${id} is not exists`);
+      throw new ConflictException(`Lesson with ${id} does not exist`);
     }
   }
 }

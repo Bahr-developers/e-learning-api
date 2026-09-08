@@ -153,7 +153,7 @@ export class CourseService {
     });
 
     if (!category) {
-      throw new ConflictException(`Category with ${id} is not exists`);
+      throw new ConflictException(`Category with ${id} does not exist`);
     }
   }
 
@@ -161,7 +161,7 @@ export class CourseService {
     const course = await this.#_prisma.course.findFirst({ where: { id: id } });
 
     if (!course) {
-      throw new ConflictException(`Course with ${id} is not exists`);
+      throw new ConflictException(`Course with ${id} does not exist`);
     }
   }
 }

@@ -81,7 +81,7 @@ export class CourseIntendService {
     });
 
     if (!course_intend) {
-      throw new ConflictException(`Course Intend with ${id} is not exists`);
+      throw new ConflictException(`Course Intend with ${id} does not exist`);
     }
   }
 
@@ -89,7 +89,7 @@ export class CourseIntendService {
     const course = await this.#_prisma.course.findFirst({ where: { id: id } });
 
     if (!course) {
-      throw new ConflictException(`Course with ${id} is not exists`);
+      throw new ConflictException(`Course with ${id} does not exist`);
     }
   }
 }

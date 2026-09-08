@@ -105,7 +105,7 @@ export class ResourceService {
     const lesson = await this.#_prisma.lesson.findFirst({ where: { id: id } });
 
     if (!lesson) {
-      throw new ConflictException(`Lesson with ${id} is not exists`);
+      throw new ConflictException(`Lesson with ${id} does not exist`);
     }
   }
 
@@ -116,7 +116,7 @@ export class ResourceService {
 
     if (resource) {
       throw new ConflictException(
-        `Resource with ${title} is already availabel`,
+        `Resource with ${title} is already available`,
       );
     }
   }

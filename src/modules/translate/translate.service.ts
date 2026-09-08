@@ -207,6 +207,6 @@ export class TranslateService {
 
   async #_checkUUID(id: string): Promise<void> {
     if (!isUUID(id, 4))
-      throw new BadRequestException(`${id} is not valid UUID`);
+      throw new BadRequestException(`${id} is not a valid UUID`);
   }
 }

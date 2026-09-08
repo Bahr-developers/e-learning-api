@@ -23,7 +23,7 @@ export class LanguageService {
   async createLanguage(payload: CreateLanguageRequest): Promise<void> {
     await this.#_checkExistingLanguage(payload.code);
     if (!payload.image) {
-      throw new BadRequestException('Image should be not Empty');
+      throw new BadRequestException('Image should not be Empty');
     }
 
     const file = await this.#_minio.uploadFile({
@@ -106,7 +106,7 @@ export class LanguageService {
     });
 
     if (!language) {
-      throw new ConflictException(`Language with ${id} is not exists`);
+      throw new ConflictException(`Language with ${id} does not exist`);
     }
   }
 

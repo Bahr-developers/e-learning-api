@@ -61,7 +61,7 @@ export class PermissionService {
     });
 
     if (!permission) {
-      throw new ConflictException(`Permission with ${id} is not exists`);
+      throw new ConflictException(`Permission with ${id} does not exist`);
     }
   }
 
@@ -69,7 +69,7 @@ export class PermissionService {
     const model = await this.#_prisma.model.findFirst({ where: { id: id } });
 
     if (!model) {
-      throw new ConflictException(`Model with ${id} is not exists`);
+      throw new ConflictException(`Model with ${id} does not exist`);
     }
   }
 
@@ -79,7 +79,7 @@ export class PermissionService {
     });
 
     if (permission) {
-      throw new ConflictException(`Permission with ${name} is already exists`);
+      throw new ConflictException(`Permission with ${name} already exists`);
     }
   }
 }

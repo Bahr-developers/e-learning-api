@@ -61,7 +61,7 @@ export class ModuleService {
     const modulee = await this.#_prisma.module.findFirst({ where: { id: id } });
 
     if (!modulee) {
-      throw new ConflictException(`Module Intend with ${id} is not exists`);
+      throw new ConflictException(`Module Intend with ${id} does not exist`);
     }
   }
 
@@ -69,7 +69,7 @@ export class ModuleService {
     const course = await this.#_prisma.course.findFirst({ where: { id: id } });
 
     if (!course) {
-      throw new ConflictException(`Course with ${id} is not exists`);
+      throw new ConflictException(`Course with ${id} does not exist`);
     }
   }
 }
